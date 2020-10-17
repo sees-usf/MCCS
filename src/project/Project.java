@@ -161,12 +161,12 @@ public class Project {
 			new TimingAnalysis(sgArray); 
 		}
 		else {
-			Analysis tmp = new Analysis(this, sgArray, initStateArray, globalVariableList);
+			new Analysis(this, sgArray, initStateArray, globalVariableList);
 		}
 		
 		
-		long elapsedTimeMillis = System.currentTimeMillis() - start; 
-		float elapsedTimeSec = elapsedTimeMillis/1000F;
+		//long elapsedTimeMillis = System.currentTimeMillis() - start; 
+		//float elapsedTimeSec = elapsedTimeMillis/1000F;
 	}
 
 	/**
