@@ -101,7 +101,7 @@ public class Options {
 	
 	private static String compositionOrder = "";
 
-	private static boolean disablingErrorFlag = true;
+	private static boolean disablingErrorFlag = false;
 	private static boolean livelockFlag = true;
 	private static boolean assertionFlag = true;
 	private static boolean clearMemoryFlag = false;
