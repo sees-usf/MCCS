@@ -38,7 +38,7 @@ public class BinaryTree {
 	 * Return the the literal of the root node. 
 	 */
 	public int add(int[] IdxArray) {
-		if(IdxArray == null)
+		if(IdxArray == null || IdxArray.length==0)
 			return -1;
 		
 		//System.out.println("add " + Arrays.toString(IdxArray));
@@ -175,6 +175,8 @@ public class BinaryTree {
 	}
 	
 	public int[] toIntArray(int nodeLit) {
+		if (nodeLit == -1)
+			return null;
 		
 		int[] tmp = this.lastAccessedTbl.get(nodeLit);
 		if(tmp != null) 
