@@ -627,10 +627,11 @@ public class LPN {
      * @return
      */
     public VarType getVarType(String var) {
-    	if (this.varNodeMap.containsKey(var) == false)
-    		throw new IllegalStateException("variable " + var + " not declared for process " + this.label);
-    	
-    	return this.varNodeMap.get(var).getType();
+    	if (this.internals.contains(var) == true)
+    		return VarType.INTERNAL;
+    	if (this.globals.contains(var) == true)
+    		return VarType.GLOBAL;
+    	throw new IllegalStateException("variable " + var + " not declared for process " + this.label);
     }
     
     public void insert(LPNTran tran) {
