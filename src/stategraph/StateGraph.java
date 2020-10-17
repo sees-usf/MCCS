@@ -556,7 +556,6 @@ public class StateGraph {
 		if (curState == null) {
 			throw new NullPointerException();
 		}
-		
 		/* First, check if current ModState exists. If yes, return the previously found 
 		 * enabled transitions and next states.
 		 */
