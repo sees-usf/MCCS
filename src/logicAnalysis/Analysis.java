@@ -83,11 +83,13 @@ public class Analysis {
 
 		this.ArraySize = sgList.length;
 		
-		if(Options.getStateFormat() == Options.StateFormatDef.EXPLICIT)
+		if(Options.getStateFormat() == Options.StateFormatDef.EXPLICIT) {
 			this.StateTable = new HashTable();
+
 			//this.StateTable = new NativeSetWrapper();
 			//this.StateTable = new NativeHybridMDDWrapper(this.ArraySize+1, true);
 			//this.StateTable = new NativeBinaryTree();
+		}
 		else if(Options.getStateFormat() == Options.StateFormatDef.MDD || Options.getStateFormat() == Options.StateFormatDef.MDDBUF)
 			this.StateTable = new MddTable(this.ArraySize+1);
 		else if(Options.getStateFormat() == Options.StateFormatDef.BINARY_TREE)
@@ -157,7 +159,7 @@ public class Analysis {
 			info4 += "--> Process infomation\n";
 			for(int i = 0; i < sgList.length; i++)
 				info4 += sgList[i].getLpn().header();
-			Console.print(info1 + info2 + info3 + info4, Console.MessageType.dynamicInfo, 20);
+			Console.print("Analysis.Analysis()@162:\n" + info1 + info2 + info3 + info4, Console.MessageType.dynamicInfo, 20);
 
 		}
 
@@ -332,7 +334,8 @@ public class Analysis {
 		for(int i = 0; i < this.ArraySize; i++)
 			initStateIdxArray[i+1] = this.initStateArray[i].getIndex();
 
-		initGlobalVec = this.makeVec(this.InitGlobalVecMap);
+		if (this.InitGlobalVecMap.size() > 0)
+			initGlobalVec = this.makeVec(this.InitGlobalVecMap);
 		//System.out.println(this.InitGlobalVecMap);
 		//System.out.println("this is initGlobalVec: " + initGlobalVec[0]);
 		// the method add is called with an empty array as parameter,
@@ -352,7 +355,9 @@ public class Analysis {
 		State[] errorLocalStateVec = null;
 		int[] errorGlobalVec = null;
 
-		/*  Main search loop */
+		/*
+		 * Main loop for DFS 
+		 */
 		main_while_loop: while (this.ErrorFlag == ErrorType.NONE && Done == false) {
 			long curTotalMem = Runtime.getRuntime().totalMemory();
 			long curUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
@@ -369,17 +374,20 @@ public class Analysis {
 
 			iterations++;
 
-
+			
+			//* if current runtime is over the limit, terminate
 			if(this.monitor.getElapsedime() >= Options.TimeUpperBound) {
 				this.timeout = true;
 				break main_while_loop;	
 			}
-
+			
+			//* if current memory use is over the limit, terminate
 			if(this.monitor.getPeakUsedMem() >= Options.MemUpperBound) {
 				this.memout = true;
 				break main_while_loop;
 			}
 
+			//* runtime statistics update
 			if (iterations % this.StatusUpdatePeriodLong == 0) {
 				String statusUpdate = "---> "
 						+ "# LPN transition firings: " + tranFiringCnt + ", "
@@ -404,7 +412,6 @@ public class Analysis {
 			// by increasing the curIndex.
 			// Otherwise, if all enabled transitions of all LPNs are considered,
 			// then pop the stacks.
-
 			if (curEnabled.size() == 0) {				
 				activeIdx++;
 				while (activeIdx < this.ArraySize) {
@@ -416,8 +423,9 @@ public class Analysis {
 				}
 			}
 
-			if (activeIdx == this.ArraySize) {
-				if(stateStack.size() == 0) {
+			
+			if (activeIdx == this.ArraySize) {  // all modules are processed in the current state
+				if(stateStack.size() == 0) {  // terminate if the search stack is empry
 					Done=true;
 					break main_while_loop;
 				}
