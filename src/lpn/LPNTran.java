@@ -735,7 +735,17 @@ public class LPNTran {
     
     	return fire(gVec, curState, thisSg, gVecTable, gVarIndexMap);
     }
-    	
+    
+    
+    /**
+     * execute this tLPN transition in the curState
+     * @param gVec	-- assignments to global variables
+     * @param curState  -- current local state of this SG
+     * @param thisSg
+     * @param gVecTable  -- table to store global states
+     * @param gVarIndexMap  -- lookup table for global variables
+     * @return the next state after executing this transition
+     */
     public ProcState fire(
         		int[] gVec,
         		final State curState, 
@@ -1118,6 +1128,9 @@ public class LPNTran {
         	System.out.print(postSet[i]+ ",");
         System.out.println("]");
 
+        for(VarNode vn : assignedVarSet) {
+            System.out.println(vn.getName());
+        }
         //System.out.print("\t Guard: ");
         //enablingGuard.print();
     }
